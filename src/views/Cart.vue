@@ -1,3 +1,4 @@
+import productsStore from '@/stores/productsStore';
 <template>
   <Loading :active="isLoading"></Loading>
   <div class="container">
@@ -100,39 +101,24 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'pinia';
+import productsStore from '@/stores/productStore';
 
 export default {
   data() {
     return {
-      products: [],
-      product: {},
       status: {
         loadingItem: '',
       },
-      form: {
-        user: {
-          name: '',
-          email: '',
-          tel: '',
-          address: '',
-        },
-        message: '',
-      },
       cart: {},
       isLoading: false,
-      coupon_code: '',
     };
   },
+  computed: {
+    ...mapState(productsStore, ['products']),
+  },
   methods: {
-    getProducts() {
-      const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products/all`;
-      this.isLoading = true;
-      this.$http.get(url).then((response) => {
-        this.products = response.data.products;
-        console.log('products:', response);
-        this.isLoading = false;
-      });
-    },
+    ...mapActions(productsStore, ['getProducts']),
     addToCart(id, qty = 1) {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`;
       this.status.loadingItem = id;
