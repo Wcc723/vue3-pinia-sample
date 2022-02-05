@@ -18,6 +18,7 @@ export default defineStore('cartStore', {
       };
       axios.post(url, { data: cart }).then((response) => {
         // axiosMessageState(response, '加入購物車');
+        status.pushMessage({ title: '加入購物車' });
         console.log(response);
         status.cartLoadingItem = '';
         this.getCart();
@@ -43,6 +44,7 @@ export default defineStore('cartStore', {
       axios.put(url, { data: cart }).then((response) => {
         console.log(response);
         this.getCart();
+        status.pushMessage({ title: '更新購物車資訊', content: response.data.message });
         status.cartLoadingItem = '';
         status.isLoading = false;
       });
@@ -53,7 +55,7 @@ export default defineStore('cartStore', {
       status.isLoading = true;
       axios.delete(url).then((response) => {
         console.log(response);
-        // axiosMessageState(response, '移除購物車品項');
+        status.pushMessage({ title: '移除購物車品項', content: response.data.message });
         status.cartLoadingItem = '';
         this.getCart();
         status.isLoading = false;
